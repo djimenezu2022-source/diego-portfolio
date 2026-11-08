@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Diego Jimenez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Josefin+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#F5F0E8;--linen:#EDE8DF;--parchment:#E6E0D5;--stone:#DDD7CB;
+  --ink:#1a1a1a;--walnut:#5a5244;--drift:#8a7e70;--mocha:#7B6A52;
+  --gold:#C9A020;--gold-l:#D4AF37;--gold-d:#B8960C;
+  --gold-dim:rgba(201,160,32,0.12);--gold-ring:rgba(201,160,32,0.35);
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'Josefin Sans',sans-serif;line-height:1.85;overflow-x:hidden;font-size:18px}
+
+/* ── SCROLL PROGRESS ── */
+.scroll-progress{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:998;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scroll-progress-track{width:1px;height:120px;background:rgba(201,160,32,0.15);border-radius:1px;position:relative;overflow:hidden}
+.scroll-progress-fill{position:absolute;top:0;left:0;width:100%;height:0%;background:linear-gradient(to bottom,var(--gold-l),var(--gold));border-radius:1px;transition:height .1s linear}
+.scroll-progress-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);border:1px solid var(--gold-l)}
+
+/* ── ANIMATION SYSTEM ── */
+@media(prefers-reduced-motion:no-preference){
+  .anim{opacity:0;transform:translateY(36px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .anim.visible{opacity:1;transform:none}
+  .anim-l{opacity:0;transform:translateX(-48px) rotate(-1deg);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .anim-l.visible{opacity:1;transform:none}
+  .anim-r{opacity:0;transform:translateX(48px) rotate(1deg);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .anim-r.visible{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+  .d4{transition-delay:.32s}.d5{transition-delay:.40s}.d6{transition-delay:.48s}
+  .tf{opacity:0;transform:translateY(24px) scale(.98)}
+  .tf.visible{opacity:1;transform:none;transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .rule{width:0;transition:width .8s cubic-bezier(.22,1,.36,1) .3s}
+  .rule.visible{width:40px}
+  .stagger>*{opacity:0;transform:translateY(20px) scale(.97);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+  .stagger.visible>*{opacity:1;transform:none}
+  .stagger.visible>*:nth-child(1){transition-delay:.05s}
+  .stagger.visible>*:nth-child(2){transition-delay:.12s}
+  .stagger.visible>*:nth-child(3){transition-delay:.19s}
+  .stagger.visible>*:nth-child(4){transition-delay:.26s}
+  .stagger.visible>*:nth-child(5){transition-delay:.33s}
+  .stagger.visible>*:nth-child(6){transition-delay:.40s}
+  .stagger.visible>*:nth-child(7){transition-delay:.47s}
+  .hero-name .line{display:block;transform:translateY(110%);transition:transform .75s cubic-bezier(.22,1,.36,1)}
+  .hero-name.visible .line:nth-child(1){transition-delay:.1s;transform:translateY(0)}
+  .hero-name.visible .line:nth-child(2){transition-delay:.22s;transform:translateY(0)}
+  .gold-underline{background-size:0% 2px;background-image:linear-gradient(var(--gold),var(--gold));background-repeat:no-repeat;background-position:0 100%;transition:background-size 1s cubic-bezier(.22,1,.36,1) .5s;padding-bottom:2px}
+  .gold-underline.visible{background-size:100% 2px}
+  .split-words .word{display:inline-block;overflow:hidden;vertical-align:bottom;margin-right:.12em}
+  .split-words .word span{display:inline-block;transform:translateY(110%);opacity:0;transition:transform .75s cubic-bezier(.22,1,.36,1),opacity .5s ease}
+  .split-words.visible .word span{transform:translateY(0);opacity:1}
+  .tl-item.from-left{opacity:0;transform:translateX(-50px)}
+  .tl-item.from-right{opacity:0;transform:translateX(50px)}
+  .tl-item.from-left.visible,.tl-item.from-right.visible{opacity:1;transform:translateX(0);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+  .tl-line-wrap::before{content:'';position:absolute;left:0;top:0;width:1px;height:0;background:linear-gradient(to bottom,var(--gold),rgba(201,160,32,0.1));transition:height 2s cubic-bezier(.22,1,.36,1);z-index:0}
+  .tl-line-wrap.visible::before{height:100%}
+  .tag-line::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .8s cubic-bezier(.22,1,.36,1) .2s}
+  .tag-line.visible::after{width:100%}
+  .work-card{background:var(--cream);border:0.5px solid rgba(26,26,26,0.1);margin-bottom:2px;position:relative;overflow:hidden;transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .6s cubic-bezier(.22,1,.36,1)}
+  .work-card::before{content:'';position:absolute;inset:0;border:2px solid transparent;transition:border-color .6s cubic-bezier(.22,1,.36,1)}
+  .work-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,175,55,0.04) 0%,transparent 60%);opacity:0;transition:opacity .6s cubic-bezier(.22,1,.36,1);pointer-events:none}
+  .work-card:hover{transform:translateY(-8px);box-shadow:0 24px 64px rgba(201,160,32,0.12)}
+  .work-card:hover::before{border-color:var(--gold)}
+  .work-card:hover::after{opacity:1}
+  .work-card .border-sweep{position:absolute;inset:0;pointer-events:none;z-index:1}
+  .work-card .border-sweep::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width .5s cubic-bezier(.22,1,.36,1)}
+  .work-card .border-sweep::after{content:'';position:absolute;bottom:0;right:0;width:0;height:2px;background:linear-gradient(270deg,var(--gold-d),var(--gold-l));transition:width .5s cubic-bezier(.22,1,.36,1) .15s}
+  .work-card:hover .border-sweep::before{width:100%}
+  .work-card:hover .border-sweep::after{width:100%}
+  .work-card .border-sweep-v::before{content:'';position:absolute;top:0;right:0;width:2px;height:0;background:linear-gradient(180deg,var(--gold-l),var(--gold-d));transition:height .5s cubic-bezier(.22,1,.36,1) .07s}
+  .work-card .border-sweep-v::after{content:'';position:absolute;bottom:0;left:0;width:2px;height:0;background:linear-gradient(0deg,var(--gold-l),var(--gold-d));transition:height .5s cubic-bezier(.22,1,.36,1) .22s}
+  .work-card:hover .border-sweep-v::before{height:100%}
+  .work-card:hover .border-sweep-v::after{height:100%}
+  .tc{transition:background .25s,transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s}
+  .tc:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.06)}
+  .ach-card{transition:border-color .25s,transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s}
+  .ach-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.06)}
+  .proj{transition:border-color .25s,transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s,opacity .7s cubic-bezier(.22,1,.36,1)}
+  .proj:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.06)}
+  .pill{transition:background .25s,transform .4s cubic-bezier(.22,1,.36,1)}
+  .pill:hover{transform:translateX(8px)}
+  .btn-p{position:relative;overflow:hidden;z-index:0;transition:all .4s cubic-bezier(.22,1,.36,1)}
+  .btn-p::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transform:translateX(-101%);transition:transform .6s cubic-bezier(.22,1,.36,1);z-index:-1;border-radius:30px}
+  .btn-p:hover::after{transform:translateX(0)}
+  .btn-p:hover{transform:translateY(-4px) scale(1.03)}
+  .btn-s{transition:all .4s cubic-bezier(.22,1,.36,1)}
+  .btn-s:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-4px) scale(1.03)}
+  .met{transition:background .25s,transform .4s cubic-bezier(.22,1,.36,1)}
+  .met:hover{transform:translateY(-6px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .anim,.anim-l,.anim-r,.tf,.stagger>*{opacity:1;transform:none;transition:none}
+  .rule{width:40px}.hero-name .line{transform:none}.gold-underline{background-size:100% 2px}
+  .split-words .word span{transform:none;opacity:1}
+  .tl-item.from-left,.tl-item.from-right{opacity:1;transform:none}
+}
+
+/* ── HERO ENHANCEMENTS ── */
+.hero-bg-pulse{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(201,160,32,0.04) 0%,transparent 70%);animation:pulse-bg 6s ease-in-out infinite;pointer-events:none}
+@keyframes pulse-bg{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+.hero-img-wrap img{animation:ken-burns 10s ease-in-out infinite alternate}
+@keyframes ken-burns{0%{transform:scale(1) translateY(0)}100%{transform:scale(1.06) translateY(-12px)}}
+.tilt-card{transform-style:preserve-3d;transition:transform .1s ease,box-shadow .4s ease}
+.tilt-card:hover{box-shadow:0 24px 64px rgba(201,160,32,0.15)}
+.tilt-glow{position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:2}
+
+/* ── PROMO BANNER ── */
+.promo-banner{background:var(--ink);padding:10px 5vw;text-align:center;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--cream);font-weight:500}
+.promo-banner span{color:var(--gold);margin:0 8px}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:999;display:flex;justify-content:space-between;align-items:center;padding:0 5vw;height:64px;background:rgba(245,240,232,0.98);backdrop-filter:blur(16px);border-bottom:1px solid rgba(26,26,26,0.08);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.06)}
+.nav-logo img{height:40px;width:auto;display:block}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--walnut);text-decoration:none;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav-burger span{width:24px;height:2px;background:var(--ink);border-radius:2px;transition:all .3s}
+.nav-mobile{display:none;position:fixed;inset:0;background:var(--cream);z-index:998;flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;padding:2rem}
+.nav-mobile.open{display:flex}
+.nav-mobile a{font-size:1.4rem;letter-spacing:3px;text-transform:uppercase;color:var(--walnut);text-decoration:none;font-weight:500;font-family:'Cormorant Garant',serif;font-style:italic}
+.nav-mobile a:hover{color:var(--gold)}
+.nav-close{position:absolute;top:2rem;right:2rem;font-size:2rem;cursor:pointer;color:var(--ink);background:none;border:none;font-family:'Josefin Sans',sans-serif;line-height:1}
+
+/* ── HERO ── */
+#hero{min-height:calc(100vh - 84px);display:grid;place-items:center;padding:5rem 5vw;position:relative;overflow:hidden;background:var(--cream)}
+.hero-noise{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,160,32,0.05) 0%,transparent 65%);pointer-events:none}
+.hero-inner{display:grid;grid-template-columns:1fr 400px;gap:5rem;align-items:center;max-width:1200px;width:100%}
+.hero-eyebrow{font-size:13px;letter-spacing:5px;text-transform:uppercase;color:var(--mocha);margin-bottom:1.5rem;font-weight:500}
+.hero-name{font-family:'Cormorant Garant',serif;font-size:clamp(4rem,10vw,9rem);font-weight:800;line-height:.92;text-transform:uppercase;letter-spacing:-.03em;color:var(--ink);margin-bottom:.5rem;overflow:hidden}
+.hero-name em{font-style:italic;color:var(--gold)}
+.hero-role{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--drift);font-weight:500;margin-bottom:2rem}
+.hero-quote{font-family:'Cormorant Garant',serif;font-size:clamp(1.3rem,2.5vw,1.8rem);font-style:italic;color:var(--ink);line-height:1.55;margin-bottom:1rem}
+.hero-desc{font-size:clamp(1rem,1.5vw,1.2rem);color:var(--walnut);line-height:2;margin-bottom:2.5rem}
+.hero-desc em{color:var(--gold);font-style:italic;font-family:'Cormorant Garant',serif}
+.btns{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn-p{padding:13px 30px;background:var(--gold);color:var(--cream);font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:30px;text-decoration:none;font-family:'Josefin Sans',sans-serif;display:inline-block;cursor:pointer}
+.btn-s{padding:13px 30px;background:transparent;color:var(--ink);font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;border:1.5px solid rgba(26,26,26,0.25);border-radius:30px;text-decoration:none;font-family:'Josefin Sans',sans-serif;display:inline-block;cursor:pointer}
+.hero-scroll{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:2.5rem}
+.scroll-line{width:1px;height:40px;background:linear-gradient(var(--gold),transparent)}
+.scroll-txt{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--drift)}
+.hero-img-wrap{position:relative;flex-shrink:0}
+.hero-img-wrap::before{content:'';position:absolute;inset:-3px;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));z-index:0}
+.hero-img-wrap img{width:100%;height:520px;object-fit:cover;object-position:top;display:block;position:relative;z-index:1}
+
+/* ── METRICS ── */
+.metrics{background:var(--linen);border-top:1px solid var(--gold-ring);border-bottom:1px solid rgba(26,26,26,0.06);display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.met{padding:1.75rem 1rem 1.25rem;text-align:center;border-right:1px solid rgba(26,26,26,0.06);position:relative}
+.met:last-child{border-right:none}
+.met-n{font-family:'Cormorant Garant',serif;font-size:2rem;font-weight:800;font-style:italic;color:var(--gold);display:block;line-height:1}
+.met-l{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--drift);margin-top:.4rem;display:block;font-weight:500}
+.met-chart{width:100%;height:32px;margin-top:.5rem;display:block}
+.met-bar-wrap{width:80%;height:2px;background:rgba(201,160,32,0.15);margin:.5rem auto 0;overflow:hidden}
+.met-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1.6s cubic-bezier(.22,1,.36,1)}
+
+/* ── SECTIONS ── */
+.sec{padding:6rem 5vw}
+.sec-alt{background:var(--linen)}
+.tag{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--mocha);margin-bottom:.6rem;display:block;font-weight:500;position:relative}
+.h2{font-family:'Cormorant Garant',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;letter-spacing:-.03em;line-height:.95;text-transform:uppercase;margin-bottom:.75rem;color:var(--ink)}
+.h2 em{font-style:italic;color:var(--gold)}
+.rule{width:40px;height:1px;background:var(--gold);margin-bottom:2.5rem}
+.lead{color:var(--walnut);font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:600px;line-height:2;margin-bottom:3rem}
+
+/* ── ABOUT ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.about-body p{font-size:clamp(1rem,1.5vw,1.2rem);line-height:2;margin-bottom:1.4rem;color:var(--ink)}
+.about-body strong{font-family:'Cormorant Garant',serif;font-style:italic;color:var(--gold);font-size:1.1em}
+.pillars{display:grid;gap:1px;background:rgba(26,26,26,0.08)}
+.pill{background:var(--cream);padding:1.5rem 1.75rem}
+.pill-t{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem;font-weight:500}
+.pill-b{font-size:clamp(1rem,1.4vw,1.1rem);color:var(--walnut);line-height:1.8}
+
+/* ── WORK ── */
+.work-card{background:var(--cream);border:0.5px solid rgba(26,26,26,0.1);margin-bottom:2px;position:relative}
+.wh{padding:2rem 2.5rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;border-bottom:1px solid rgba(26,26,26,0.06)}
+.w-tag{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mocha);margin-bottom:.4rem;display:block;font-weight:500}
+.w-org{font-family:'Cormorant Garant',serif;font-size:clamp(1.3rem,2.5vw,1.6rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;color:var(--ink)}
+.w-desc{font-size:clamp(1rem,1.4vw,1.15rem);color:var(--walnut);max-width:500px;line-height:1.9}
+.w-kpis{display:flex;flex-wrap:wrap;gap:.6rem;align-self:start}
+.kpi{background:var(--gold-dim);border:1px solid var(--gold-ring);border-radius:30px;padding:.5rem 1rem;min-width:90px;text-align:center;position:relative;overflow:hidden}
+.kpi-bar{position:absolute;bottom:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width 1.4s cubic-bezier(.22,1,.36,1)}
+.kpi-n{font-family:'Cormorant Garant',serif;font-size:1.1rem;font-weight:800;font-style:italic;color:var(--gold);display:block;line-height:1}
+.kpi-l{font-size:11px;color:var(--drift);text-transform:uppercase;letter-spacing:1px;margin-top:3px;display:block;font-weight:500}
+.vids{padding:2rem 2.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;background:var(--linen)}
+.vids .wistia-wrap{max-width:70%;margin:0 auto}
+.vid-wrap{display:flex;flex-direction:column;gap:.6rem}
+.vid-v{font-family:'Cormorant Garant',serif;font-size:1.1rem;font-weight:700;font-style:italic;color:var(--gold)}
+.vid-t{font-size:1.05rem;color:var(--ink);font-weight:500;line-height:1.5}
+.vid-d{font-size:1rem;color:var(--walnut);line-height:1.75}
+.wistia-wrap{overflow:hidden;background:var(--parchment)}
+
+/* ── PROJECTS ── */
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.proj{background:var(--cream);border:0.5px solid rgba(26,26,26,0.08);overflow:hidden;opacity:0;transform:translateY(24px)}
+.proj.visible{opacity:1;transform:none}
+.proj .wistia-wrap{aspect-ratio:16/9}
+.proj-info{padding:1.25rem 1.5rem}
+.proj-cat{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mocha);margin-bottom:.4rem;font-weight:500}
+.proj-t{font-family:'Cormorant Garant',serif;font-size:1.2rem;color:var(--ink);font-weight:700;line-height:1.3}
+
+/* ── JOURNEY ── */
+.tl{max-width:900px;position:relative}
+.tl-line-wrap{position:relative;padding-left:2px}
+.tl-item{display:grid;grid-template-columns:160px 1fr;gap:2rem;padding:2.5rem 0;border-bottom:1px solid rgba(26,26,26,0.08);position:relative}
+.tl-item:last-child{border-bottom:none}
+.tl-left{padding-left:2rem}
+.tl-date{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--mocha);margin-bottom:.3rem;font-weight:500}
+.tl-co{font-size:1.05rem;font-weight:600;color:var(--ink)}
+.tl-role{font-family:'Cormorant Garant',serif;font-size:clamp(1.1rem,2vw,1.3rem);font-weight:700;font-style:italic;color:var(--gold);margin-bottom:.5rem}
+.tl-desc{font-size:clamp(1rem,1.4vw,1.15rem);color:var(--walnut);line-height:1.9;margin-bottom:.75rem}
+.tl-desc:last-child{margin-bottom:0}
+.tl-closing{font-family:'Cormorant Garant',serif;font-style:italic;color:var(--ink);font-size:1.15rem;line-height:1.7;margin-top:.5rem}
+
+/* Gold vertical line — scroll-driven */
+.tl-track{position:absolute;left:0;top:0;bottom:0;width:2px;background:rgba(201,160,32,0.1)}
+.tl-progress{position:absolute;left:0;top:0;width:2px;height:0;background:linear-gradient(to bottom,var(--gold-l),var(--gold),var(--gold-d));transition:height .05s linear}
+.tl-arrow{position:absolute;left:-4px;width:10px;height:10px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);background:transparent;transition:top .05s linear}
+
+/* ── ACHIEVEMENTS ── */
+.ach-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2px}
+.ach-card{background:var(--cream);border:0.5px solid rgba(26,26,26,0.08);padding:2.5rem}
+.ach-school{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--mocha);margin-bottom:1.5rem;display:block;font-weight:500}
+.ach-item{display:flex;gap:.75rem;margin-bottom:1.1rem;align-items:flex-start}
+.ach-dot{width:4px;height:4px;background:var(--gold);border-radius:50%;margin-top:.65rem;flex-shrink:0}
+.ach-n{font-size:1.05rem;color:var(--ink);font-weight:500;line-height:1.3}
+.ach-s{font-size:.95rem;color:var(--drift);margin-top:.2rem;line-height:1.65}
+
+/* ── SKILLS ── */
+.sk-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:2px;background:rgba(26,26,26,0.06)}
+.sk-g{background:var(--linen);padding:2rem 1.75rem}
+.sk-cat{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;font-weight:500}
+.sk-tag{display:inline-block;font-size:.95rem;color:var(--walnut);border:1.5px solid rgba(201,160,32,0.3);border-radius:30px;padding:6px 16px;margin:3px 2px;font-weight:400}
+
+/* ── TESTIMONIALS ── */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;background:rgba(26,26,26,0.06)}
+.tc{background:var(--cream);padding:2.5rem;display:flex;flex-direction:column;position:relative}
+.tc::before{content:'\201C';position:absolute;top:1.5rem;right:2rem;font-size:6rem;color:rgba(201,160,32,0.08);line-height:1;font-family:'Cormorant Garant',serif;pointer-events:none}
+.tc-q{font-size:clamp(1rem,1.4vw,1.15rem);color:var(--ink);line-height:1.95;font-style:italic;margin-bottom:2rem;flex:1;font-family:'Cormorant Garant',serif}
+.tc-name{font-family:'Cormorant Garant',serif;font-size:1.1rem;font-weight:700;font-style:italic;color:var(--gold)}
+.tc-role{font-size:1rem;color:var(--walnut);margin-top:.2rem}
+.tc-email{font-size:.9rem;color:var(--mocha);opacity:.7;margin-top:.15rem}
+
+/* ── CONTACT ── */
+#contact{background:var(--ink);text-align:center;padding:8rem 5vw}
+.contact-h{font-family:'Cormorant Garant',serif;font-size:clamp(2rem,5vw,4rem);font-weight:800;text-transform:uppercase;letter-spacing:-.03em;max-width:800px;margin:0 auto 1rem;line-height:.95;color:var(--cream)}
+.contact-h em{font-style:italic;color:var(--gold)}
+.contact-sub{color:var(--drift);font-size:1.1rem;letter-spacing:1px;margin-bottom:1.5rem}
+.contact-email{font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:700;font-style:italic;color:var(--gold);text-decoration:none;display:block;margin-bottom:.4rem}
+.contact-ph{color:var(--drift);font-size:1.1rem;margin-bottom:3rem}
+.clinks{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-bottom:5rem}
+.cl{display:flex;align-items:center;gap:.6rem;padding:12px 24px;border:1.5px solid rgba(245,240,232,0.2);border-radius:30px;text-decoration:none;color:var(--drift);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:all .3s}
+.cl:hover{border-color:var(--gold);color:var(--gold)}
+.cl svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+.footer-sig{font-family:'Cormorant Garant',serif;font-size:1.2rem;font-style:italic;color:var(--drift);padding-top:3rem;border-top:1px solid rgba(245,240,232,0.08)}
+.footer-sig em{color:var(--gold)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){.hero-inner{grid-template-columns:1fr 360px;gap:3rem}.wh{padding:2rem}.vids{padding:1.5rem 2rem}}
+@media(max-width:1024px){.hero-inner{grid-template-columns:1fr 300px;gap:2.5rem}.hero-img-wrap img{height:440px}.grid2{grid-template-columns:1fr;gap:2.5rem}.wh{grid-template-columns:1fr;gap:1.5rem}.vids{grid-template-columns:1fr 1fr;padding:1.5rem}.tl-item{grid-template-columns:130px 1fr;gap:1.5rem}.ach-wrap{grid-template-columns:1fr}.ach-card[style*="grid-column"]{grid-template-columns:1fr!important;gap:1.5rem}}
+@media(max-width:768px){body{font-size:16px}.scroll-progress{display:none}.nav-links{display:none}.nav-burger{display:flex}#hero{padding:4rem 1.25rem 3rem;min-height:auto}.hero-inner{grid-template-columns:1fr;gap:2rem;text-align:center}.hero-img-wrap{width:240px;margin:0 auto}.hero-img-wrap img{height:300px}.btns{justify-content:center}.hero-scroll{align-items:center}.hero-name{font-size:clamp(3rem,16vw,5rem)}.h2{font-size:clamp(1.8rem,8vw,2.5rem)}.sec{padding:3.5rem 1.25rem}.metrics{grid-template-columns:repeat(2,1fr)}.met{border-right:none;border-bottom:1px solid rgba(26,26,26,0.06)}.grid2{grid-template-columns:1fr;gap:2rem}.wh{padding:1.25rem;grid-template-columns:1fr}.w-kpis{flex-wrap:wrap;gap:.4rem}.kpi{min-width:80px;padding:.4rem .75rem}.vids{grid-template-columns:1fr;padding:1.25rem;gap:1.5rem}.vids .wistia-wrap{max-width:100%!important}.proj-grid{grid-template-columns:1fr}.proj[style*="grid-column"]{grid-column:auto!important;max-width:100%!important}.tl-item{grid-template-columns:1fr;gap:.5rem}.tl-item.from-left,.tl-item.from-right{transform:translateY(20px);opacity:0}.tl-item.from-left.visible,.tl-item.from-right.visible{transform:none;opacity:1}.test-grid{grid-template-columns:1fr}.ach-wrap{grid-template-columns:1fr}.ach-card[style*="grid-column"]{grid-column:auto!important;grid-template-columns:1fr!important;gap:1.5rem}.ach-card[style*="grid-column"] img{height:240px!important;max-width:100%!important}.sk-wrap{grid-template-columns:1fr 1fr}.clinks{gap:.5rem}.cl{padding:10px 14px;font-size:11px}.contact-h{font-size:clamp(1.6rem,7vw,2.5rem)}#contact{padding:5rem 1.25rem}.about-img-wrap{width:260px!important}.about-img-wrap img{height:320px!important}.tl-line-wrap::before{display:none}}
+@media(max-width:480px){body{font-size:15px}.hero-name{font-size:clamp(2.8rem,18vw,4.5rem)}.h2{font-size:clamp(1.6rem,9vw,2.2rem)}.hero-img-wrap{width:200px}.hero-img-wrap img{height:260px}.sk-wrap{grid-template-columns:1fr}.w-kpis{gap:.3rem}.kpi{min-width:70px;padding:.35rem .6rem}.vids{grid-template-columns:1fr}.proj-grid{grid-template-columns:1fr}.clinks{flex-direction:column;align-items:center}.cl{width:100%;max-width:280px;justify-content:center}.wh{padding:1rem}.sec{padding:3rem 1rem}.promo-banner{font-size:11px;letter-spacing:1px;padding:8px 1rem}.btn-p,.btn-s{padding:11px 20px;font-size:11px}}
+@media(max-width:360px){.hero-name{font-size:clamp(2.4rem,16vw,3.5rem)}.metrics{grid-template-columns:1fr 1fr}.kpi{min-width:60px}}
+/* ── RESPONSIVE RULES FOR NEW TIMELINE MEDIA ── */
+@media(max-width:768px){
+.tl-media-split{grid-template-columns:1fr!important}
+.tl-media-split>div[style*="max-width:70%"]{max-width:75%!important;margin-top:.5rem!important}
+.tl-photos-row{grid-template-columns:repeat(2,1fr)!important}
+.tl-vids-mcm{grid-template-columns:1fr!important}
+.tl-vids-mcm>div[style*="grid-column"]{grid-column:auto!important;width:100%!important}
+}
+@media(max-width:480px){
+.tl-media-split>div[style*="max-width:70%"]{max-width:85%!important}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress">
+  <div class="scroll-progress-dot"></div>
+  <div class="scroll-progress-track"><div class="scroll-progress-fill" id="spFill"></div></div>
+  <div class="scroll-progress-dot"></div>
+</div>
+
+<div class="promo-banner">Open to internships<span>·</span>Collaborations<span>·</span>Creative Projects</div>
+
+<nav>
+  <div class="nav-logo">
+    <img src="assets/dj-logo.png" alt="Diego Jimenez" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span style="display:none;font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:700;font-style:italic;color:var(--gold)">DJ</span>
+  </div>
+  <div class="nav-links">
+    <a href="#about">About</a><a href="#work">Work</a><a href="#projects">Projects</a>
+    <a href="#journey">Journey</a><a href="#achievements">Awards</a>
+    <a href="#testimonials">Testimonials</a><a href="#contact">Connect</a>
+  </div>
+  <div class="nav-burger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="nav-mobile">
+  <button class="nav-close" onclick="document.querySelector('.nav-mobile').classList.remove('open')">×</button>
+  <a href="#about" onclick="document.querySelector('.nav-mobile').classList.remove('open')">About</a>
+  <a href="#work" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Work</a>
+  <a href="#projects" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Projects</a>
+  <a href="#journey" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Journey</a>
+  <a href="#achievements" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Awards</a>
+  <a href="#testimonials" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Testimonials</a>
+  <a href="#contact" onclick="document.querySelector('.nav-mobile').classList.remove('open')">Connect</a>
+</div>
+
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-bg-pulse"></div>
+  <div class="hero-inner">
+    <div>
+      <p class="hero-eyebrow anim d1">Marketing · Strategy · Storytelling</p>
+      <h1 class="hero-name anim d2"><span class="line">Diego</span><span class="line"><em>Jimenez</em></span></h1>
+      <p class="hero-role anim d3">Marketing Portfolio and Journey</p>
+      <p class="hero-quote anim d4">The stories we tell shape how people see the world.</p>
+      <p class="hero-desc anim d5">I believe marketing, when built with intention, has the power to <em>connect audiences</em>, strengthen brands, and drive measurable growth.</p>
+      <div class="btns anim d6">
+        <a href="#work" class="btn-p">View My Work</a>
+        <a href="#contact" class="btn-s">Let's Connect</a>
+      </div>
+      <div class="hero-scroll anim" style="transition-delay:.9s">
+        <div class="scroll-line"></div><span class="scroll-txt">Scroll</span>
+      </div>
+    </div>
+    <div class="hero-img-wrap anim-r d3">
+      <img src="assets/hero-photo.jpg" alt="Diego Jimenez"/>
+    </div>
+  </div>
+</section>
+
+<div class="metrics stagger">
+  <div class="met"><span class="met-n" data-display="1.4M+">1.4M+</span><span class="met-l">Impressions</span>
+    <svg class="met-chart" viewBox="0 0 100 32"><polyline class="spark-gold" points="0,28 16,22 32,18 48,12 64,8 80,5 100,1" fill="none" stroke="#C9A020" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="200" stroke-dashoffset="200"/></svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="92"></div></div></div>
+  <div class="met"><span class="met-n" data-target="54" data-suffix="%">54%</span><span class="met-l">Follower Growth</span>
+    <svg class="met-chart" viewBox="0 0 100 32">
+      <rect class="spark-bar" x="8" y="30" width="10" height="0" fill="rgba(201,160,32,0.3)" data-h="8"/>
+      <rect class="spark-bar" x="22" y="30" width="10" height="0" fill="rgba(201,160,32,0.5)" data-h="16"/>
+      <rect class="spark-bar" x="36" y="30" width="10" height="0" fill="rgba(201,160,32,0.7)" data-h="22"/>
+      <rect class="spark-bar" x="50" y="30" width="10" height="0" fill="#C9A020" data-h="30"/>
+    </svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="54"></div></div></div>
+  <div class="met"><span class="met-n" data-display="677K+">677K+</span><span class="met-l">Total Views</span>
+    <svg class="met-chart" viewBox="0 0 100 32"><polyline class="spark-gold" points="0,30 20,24 40,18 60,12 80,7 100,2" fill="none" stroke="#C9A020" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="200" stroke-dashoffset="200"/><circle class="spark-dot" cx="100" cy="2" r="3" fill="#C9A020" opacity="0"/></svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="78"></div></div></div>
+  <div class="met"><span class="met-n" data-display="+174%">+174%</span><span class="met-l">FB Followers</span>
+    <svg class="met-chart" viewBox="0 0 100 32">
+      <rect class="spark-bar" x="5" y="30" width="8" height="0" fill="rgba(201,160,32,0.25)" data-h="6"/>
+      <rect class="spark-bar" x="18" y="30" width="8" height="0" fill="rgba(201,160,32,0.5)" data-h="14"/>
+      <rect class="spark-bar" x="31" y="30" width="8" height="0" fill="rgba(201,160,32,0.7)" data-h="22"/>
+      <rect class="spark-bar" x="44" y="30" width="8" height="0" fill="#C9A020" data-h="30"/>
+    </svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="89"></div></div></div>
+  <div class="met"><span class="met-n" data-display="10.4K">10.4K</span><span class="met-l">Link Clicks</span>
+    <svg class="met-chart" viewBox="0 0 100 32"><polyline class="spark-gold" points="0,30 12,26 24,20 36,24 48,14 60,16 72,8 86,10 100,3" fill="none" stroke="#C9A020" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="220"/><circle class="spark-dot" cx="100" cy="3" r="3" fill="#C9A020" opacity="0"/></svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="62"></div></div></div>
+  <div class="met"><span class="met-n" data-display="+148%">+148%</span><span class="met-l">Video Plays</span>
+    <svg class="met-chart" viewBox="0 0 100 32">
+      <rect class="spark-bar" x="5" y="30" width="8" height="0" fill="rgba(201,160,32,0.25)" data-h="6"/>
+      <rect class="spark-bar" x="18" y="30" width="8" height="0" fill="rgba(201,160,32,0.45)" data-h="12"/>
+      <rect class="spark-bar" x="31" y="30" width="8" height="0" fill="rgba(201,160,32,0.65)" data-h="20"/>
+      <rect class="spark-bar" x="44" y="30" width="8" height="0" fill="#C9A020" data-h="30"/>
+    </svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="85"></div></div></div>
+  <div class="met"><span class="met-n">76–90%</span><span class="met-l">Non-Follower Reach</span>
+    <svg class="met-chart" viewBox="0 0 100 32"><rect x="0" y="14" width="100" height="12" fill="rgba(201,160,32,0.08)" rx="2"/><rect class="spark-fill" x="0" y="14" width="0" height="12" fill="rgba(201,160,32,0.3)" rx="2" data-w="83"/><text x="50" y="24" text-anchor="middle" font-size="7" fill="#C9A020" font-family="'Josefin Sans',sans-serif" font-weight="500">76–90%</text></svg>
+    <div class="met-bar-wrap"><div class="met-bar" data-pct="83"></div></div></div>
+</div>
+
+<section class="sec" id="about">
+  <span class="tag anim">About Me</span>
+  <h2 class="h2 anim d1">Storytelling +<br/><em>Strategy</em></h2>
+  <div class="rule anim d2"></div>
+  <div class="anim d3" style="display:flex;justify-content:center;margin-bottom:3rem">
+    <div class="about-img-wrap" style="position:relative;width:420px;max-width:90vw">
+      <div style="position:absolute;inset:-3px;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));z-index:0"></div>
+      <img src="assets/demo-day-about.jpeg" alt="Diego Jimenez" style="width:100%;height:500px;object-fit:cover;object-position:top;display:block;position:relative;z-index:1"/>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="about-body anim-l d2">
+      <p><strong>The stories we tell shape how people see the world.</strong></p>
+      <p class="anim" style="transition-delay:.1s">I believe marketing, when built with intention, has the power to <span class="gold-underline">connect audiences</span>, strengthen brands, and drive measurable growth. I learned how narrative builds identity at scale. I applied strategy to turn content into clicks, conversations, and signed athletes.</p>
+      <p class="anim" style="transition-delay:.2s">I worked on solving real customer experience challenges through structured problem-solving. I gained hands-on experience in <span class="gold-underline">customer behavior, sales execution, and brand representation</span> in real environments.</p>
+      <p class="anim" style="transition-delay:.3s">This is my work. This is my experience. But above all, <span class="gold-underline">this is my story and my passion</span>.</p>
+    </div>
+    <div class="pillars anim-r d3">
+      <div class="pill"><div class="pill-t">Storytelling</div><div class="pill-b">Narrative that builds identity and emotional connection at scale.</div></div>
+      <div class="pill"><div class="pill-t">Strategy</div><div class="pill-b">Data-informed decisions that turn content into measurable outcomes.</div></div>
+      <div class="pill"><div class="pill-t">Discipline</div><div class="pill-b">Built through two seasons of collegiate soccer. Consistency and focus.</div></div>
+      <div class="pill"><div class="pill-t">Results</div><div class="pill-b">Every post, every campaign, every decision tied back to outcomes that matter.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="work">
+  <span class="tag anim">Featured Work</span>
+  <h2 class="h2 anim d1">Results That<br/><em>Speak</em></h2>
+  <div class="rule anim d2"></div>
+
+  <div class="work-card anim d2">
+    <div class="border-sweep"></div>
+    <div class="border-sweep-v"></div>
+    <div class="tilt-glow"></div>
+    <div class="wh">
+      <div>
+        <span class="w-tag">Content Creator · UA Productions</span>
+        <div class="w-org">University of Arkansas</div>
+        <p class="w-desc">As a Content Creator for UA Productions within the University of Arkansas Marketing and Communications team, I contributed to strategic short-form storytelling designed to strengthen the Division of Student Affairs digital presence.</p>
+      </div>
+      <div class="w-kpis">
+        <div class="kpi"><span class="kpi-n">54%</span><span class="kpi-l">Follower Growth</span><div class="kpi-bar" data-pct="54"></div></div>
+        <div class="kpi"><span class="kpi-n">1.4M+</span><span class="kpi-l">Impressions</span><div class="kpi-bar" data-pct="92"></div></div>
+        <div class="kpi"><span class="kpi-n">76–90%</span><span class="kpi-l">Non-Follower Reach</span><div class="kpi-bar" data-pct="83"></div></div>
+      </div>
+    </div>
+    <div class="vids">
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/ruhh6nb2v5.js" async type="module"></script><style>wistia-player[media-id='ruhh6nb2v5']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/ruhh6nb2v5/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="ruhh6nb2v5" aspect="0.5625"></wistia-player></div><div><div class="vid-v">25,800+ views</div><div class="vid-t">The Beautiful University of Arkansas</div><div class="vid-d">Cinematic storytelling to strengthen emotional connection and brand identity.</div></div></div>
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/c5gwc8o6wp.js" async type="module"></script><style>wistia-player[media-id='c5gwc8o6wp']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/c5gwc8o6wp/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="c5gwc8o6wp" aspect="0.5625"></wistia-player></div><div><div class="vid-v">21,700+ views</div><div class="vid-t">The Hog Call</div><div class="vid-d">Captures tradition and drives authentic community engagement.</div></div></div>
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/ll0ng65tr9.js" async type="module"></script><style>wistia-player[media-id='ll0ng65tr9']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/ll0ng65tr9/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="ll0ng65tr9" aspect="0.5625"></wistia-player></div><div><div class="vid-v">16,000+ views</div><div class="vid-t">Make A Difference Day</div><div class="vid-d">600 volunteers, 26 projects, reinforcing values of service and civic impact.</div></div></div>
+    </div>
+  </div>
+
+  <div class="work-card anim d3">
+    <div class="border-sweep"></div>
+    <div class="border-sweep-v"></div>
+    <div class="tilt-glow"></div>
+    <div class="wh">
+      <div>
+        <span class="w-tag">Co-Founder & Marketing Lead</span>
+        <div class="w-org">Elite Level Scouting</div>
+        <p class="w-desc">Elite Level is an entrepreneurial student-athlete recruiting initiative built from my lived experience as a Bolivian student-athlete. As Co-Founder and Marketing Lead, I shape the brand, content strategy, and athlete storytelling, with a focus on making the U.S. college recruiting process clearer for Latin American families.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem;align-items:flex-end">
+        <div class="w-kpis">
+          <div class="kpi"><span class="kpi-n">677K+</span><span class="kpi-l">Total Views</span><div class="kpi-bar" data-pct="90"></div></div>
+          <div class="kpi"><span class="kpi-n">8.2%</span><span class="kpi-l">Engagement</span><div class="kpi-bar" data-pct="58"></div></div>
+        </div>
+        <img src="assets/pitch-competition-2.jpeg" alt="Elite Level" style="width:100%;max-width:320px;height:280px;object-fit:cover;object-position:center;display:block;border-left:3px solid var(--gold);align-self:center"/>
+        <div class="w-kpis">
+          <div class="kpi"><span class="kpi-n">+174%</span><span class="kpi-l">FB Followers</span><div class="kpi-bar" data-pct="87"></div></div>
+          <div class="kpi"><span class="kpi-n">10.4K</span><span class="kpi-l">Link Clicks</span><div class="kpi-bar" data-pct="66"></div></div>
+          <div class="kpi"><span class="kpi-n">Bs. 0.22</span><span class="kpi-l">Cost Per Click</span><div class="kpi-bar" data-pct="45"></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--drift);font-style:italic;letter-spacing:.5px;align-self:center">Elite Level results: January 1 to July 7, 2026</div>
+      </div>
+    </div>
+    <div class="vids">
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/n1w8sawqb3.js" async type="module"></script><style>wistia-player[media-id='n1w8sawqb3']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/n1w8sawqb3/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="n1w8sawqb3" aspect="0.5625"></wistia-player></div><div><div class="vid-v">46,100+ views</div><div class="vid-t">De Atletas Para Atletas</div><div class="vid-d">Brand campaign built from 100+ athlete conversations, positioning transparency as our difference.</div></div></div>
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/qhwng8dm8l.js" async type="module"></script><style>wistia-player[media-id='qhwng8dm8l']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/qhwng8dm8l/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="qhwng8dm8l" aspect="0.5625"></wistia-player></div><div><div class="vid-v">18,200+ views</div><div class="vid-t">Testimonio Hermanos Rincon</div><div class="vid-d">Success story of two Venezuelan brothers recruited together, turning real results into trust.</div></div></div>
+      <div class="vid-wrap"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/7rgrggo1bf.js" async type="module"></script><style>wistia-player[media-id='7rgrggo1bf']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/7rgrggo1bf/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="7rgrggo1bf" aspect="0.5625"></wistia-player></div><div><div class="vid-v">136,000+ views</div><div class="vid-t">Esta Noticia lo cambia todo</div><div class="vid-d">News content breaking down the new NCAA two-season format, converting massive reach into applications.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="projects">
+  <span class="tag anim">Personal Projects</span>
+  <h2 class="h2 anim d1">A Little Bit of<br/><em>What I Do</em></h2>
+  <div class="rule anim d2"></div>
+  <p class="lead anim d3">Beyond client work, personal storytelling that reflects who I am and how I see the world.</p>
+  <div class="proj-grid">
+    <div class="proj"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/qj47es12zy.js" async type="module"></script><style>wistia-player[media-id='qj47es12zy']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/qj47es12zy/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="qj47es12zy" aspect="1.7777777777777777"></wistia-player></div><div class="proj-info"><div class="proj-cat">Interview</div><div class="proj-t">Interview with Noah Scott</div></div></div>
+    <div class="proj"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/b0nuw3mrp2.js" async type="module"></script><style>wistia-player[media-id='b0nuw3mrp2']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/b0nuw3mrp2/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="b0nuw3mrp2" aspect="1.7777777777777777"></wistia-player></div><div class="proj-info"><div class="proj-cat">Vlog</div><div class="proj-t">Spring Break 2026, Day 1</div></div></div>
+    <div class="proj"><div class="wistia-wrap"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/c1903e64ha.js" async type="module"></script><style>wistia-player[media-id='c1903e64ha']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/c1903e64ha/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="c1903e64ha" aspect="1.7777777777777777"></wistia-player></div><div class="proj-info"><div class="proj-cat">Storytelling</div><div class="proj-t">Two Students, One Idea</div></div></div>
+    <div class="proj"><div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/5jwndd8q4k.js" async type="module"></script><style>wistia-player[media-id='5jwndd8q4k']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/5jwndd8q4k/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="5jwndd8q4k" aspect="1.7777777777777777"></wistia-player></div><div class="proj-info"><div class="proj-cat">Brand</div><div class="proj-t">Career Fair Video</div></div></div>
+    <div class="proj" style="grid-column:span 2;max-width:55%;margin:0 auto;width:100%"><div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/0rhmdy09hp.js" async type="module"></script><style>wistia-player[media-id='0rhmdy09hp']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/0rhmdy09hp/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="0rhmdy09hp" aspect="1.7777777777777777"></wistia-player></div><div class="proj-info" style="text-align:center"><div class="proj-cat">Vlog</div><div class="proj-t">Here We Go Again</div></div></div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="journey">
+  <span class="tag anim">My Journey</span>
+  <h2 class="h2 anim d1">Every Experience<br/><em>Shaped Me</em></h2>
+  <div class="rule anim d2"></div>
+  <p class="lead anim d3">From Bolivia to Wyoming to Arkansas, each phase of my life added a new dimension to how I think, create, and deliver results.</p>
+  <div class="tl tl-line-wrap" id="tlWrap">
+    <div class="tl-track"></div>
+    <div class="tl-progress" id="tlProgress"></div>
+    <div class="tl-arrow" id="tlArrow"></div>
+
+    <div class="tl-item from-right tf">
+      <div class="tl-left"><div class="tl-date">May 2026 to Present</div><div class="tl-co">Slim Chickens</div></div>
+      <div>
+        <div class="tl-role">Marketing Technology Intern</div>
+        <div class="tl-desc">At Slim Chickens, I work as a Marketing Technology Intern on the Digital Revenue and Guest Loyalty team, supporting the systems behind the Slimthusiast loyalty app and the broader guest experience.</div>
+        <div class="tl-desc" style="margin-top:1rem">My work lives at the intersection of marketing, customer support, and technology. I use platforms like Zendesk, Punchh, and SMG to resolve guest issues, support loyalty-app workflows, analyze recurring customer problems, and understand how digital systems shape the way guests experience the brand.</div>
+        <div class="tl-desc" style="margin-top:1rem">Beyond support operations, I have also been involved in Slim Chickens' content creation process, helping record and participate in social media videos while learning how a national restaurant brand builds content from the inside.</div>
+        <div class="tl-desc" style="margin-top:1rem">One of the biggest projects I am developing is an AI-assisted customer support workflow. The goal is to explore how AI can help classify support tickets, identify issue types, draft responses, and make the guest-support process faster and more consistent while still keeping a human in control.</div>
+        <div class="tl-closing">This internship has shown me that marketing is not only campaigns and creative ideas. It is also systems, loyalty, customer experience, data, content, and the operational details that determine how people feel when they interact with a brand.</div>
+        <div class="tl-media-split" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:1.5rem">
+          <!-- SLIM CHICKENS IMAGES -->
+          <div style="display:flex;flex-direction:column;gap:4px;align-self:center">
+            <img src="assets/slims-first-day.jpg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+            <img src="assets/slim-chickens-2.jpeg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+          </div>
+          <!-- SLIM CHICKENS VIDEO: Day in the life as an Intern at Slim Chickens -->
+          <div style="max-width:70%;margin:0 auto;width:100%;align-self:center"><div class="wistia-wrap" style="aspect-ratio:9/16"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/3ihbc4bs32.js" async type="module"></script><style>wistia-player[media-id='3ihbc4bs32']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/3ihbc4bs32/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="3ihbc4bs32" aspect="0.5625" style="width:100%;height:100%"></wistia-player></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item from-left tf">
+      <div class="tl-left"><div class="tl-date">2025 to Present</div><div class="tl-co">University of Arkansas</div></div>
+      <div>
+        <div class="tl-role">Content Creator, UA Productions</div>
+        <div class="tl-desc">I create performance-driven content across platforms, using short and long-form video to tell meaningful stories about the University of Arkansas and expand its digital presence through strategic storytelling.</div>
+        <!-- UA PRODUCTIONS VIDEO (16:9) -->
+        <div class="wistia-wrap" style="aspect-ratio:16/9;margin-top:1rem"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/7b652wgldq.js" async type="module"></script><style>wistia-player[media-id='7b652wgldq']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/7b652wgldq/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="7b652wgldq" aspect="1.7777777777777777"></wistia-player></div>
+        <div class="tl-photos-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:4px">
+          <img src="assets/ua-productions-1.jpeg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+          <img src="assets/ua-productions-2.jpeg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+          <img src="assets/ua-productions-3.jpeg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+          <img src="assets/ua-productions-4.jpeg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item from-right tf">
+      <div class="tl-left"><div class="tl-date">2025 to Present</div><div class="tl-co">Elite Level Scouting</div></div>
+      <div>
+        <div class="tl-role">Co-Founder & Marketing Lead</div>
+        <div class="tl-desc">Elite Level connects Latin American soccer players with U.S. college programs. I built the brand and marketing strategy from scratch as an entrepreneurial project developed during university breaks in Bolivia.</div>
+        <div class="tl-desc" style="margin-top:1rem">I grew up playing fútbol in Bolivia. When I arrived in the U.S. on a soccer scholarship, I saw how isolating and confusing the recruiting process was. When I met Hugo, another Bolivian who had walked the same road, we built something for the families we left behind.</div>
+        <div class="tl-desc" style="margin-top:1rem">My role was everything that made the brand real. The content strategy. The visual identity. The storytelling. I knew what it felt like to be a family going through this without truly understanding what was happening. So I made it my mission to change that. Not through ads. Through story.</div>
+        <div class="tl-desc" style="margin-top:1rem">We built the content engine from zero. 677K+ views. 5+ families with scholarship offers. 10+ families currently in the process across South America.</div>
+        <div class="tl-closing">I didn't just want to be part of this story. I wanted to be the one who told it right.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:1.5rem">
+          <div style="max-width:70%;margin:0 auto;width:100%"><div class="wistia-wrap" style="aspect-ratio:9/16"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/27fbpfyz2p.js" async type="module"></script><style>wistia-player[media-id='27fbpfyz2p']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/27fbpfyz2p/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="27fbpfyz2p" aspect="0.5625" style="width:100%;height:100%"></wistia-player></div></div>
+          <div style="max-width:70%;margin:0 auto;width:100%"><div class="wistia-wrap" style="aspect-ratio:9/16"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/6a11j1rohc.js" async type="module"></script><style>wistia-player[media-id='6a11j1rohc']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/6a11j1rohc/swatch');display:block;filter:blur(5px);padding-top:177.78%}</style><wistia-player media-id="6a11j1rohc" aspect="0.5625" style="width:100%;height:100%"></wistia-player></div></div>
+        </div>
+        <div style="max-width:70%;margin:.75rem auto 0;width:100%"><div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/woecsjwktq.js" async type="module"></script><style>wistia-player[media-id='woecsjwktq']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/woecsjwktq/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="woecsjwktq" aspect="1.7777777777777777" style="width:100%;height:100%"></wistia-player></div></div>
+      </div>
+    </div>
+
+    <div class="tl-item from-left tf">
+      <div class="tl-left"><div class="tl-date">2026 to Present</div><div class="tl-co">University of Arkansas</div></div>
+      <div>
+        <div class="tl-role">Design Team Member, McMillon Innovation Studio</div>
+        <div class="tl-desc">At McMillon Innovation Studio, I collaborate as part of a student design team solving real customer experience challenges for Slim Chickens. Through interviews, surveys, and focus groups, we translate insights into ideated solutions and prototypes to enhance the drive-thru experience.</div>
+        <div class="tl-vids-mcm" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:1rem">
+          <div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/kw4kciam6x.js" async type="module"></script><style>wistia-player[media-id='kw4kciam6x']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/kw4kciam6x/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="kw4kciam6x" aspect="1.7777777777777777" style="width:100%;height:100%"></wistia-player></div>
+          <div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/u9jifn5c11.js" async type="module"></script><style>wistia-player[media-id='u9jifn5c11']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/u9jifn5c11/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="u9jifn5c11" aspect="1.7777777777777777" style="width:100%;height:100%"></wistia-player></div>
+          <!-- MCMILLON VIDEO 3 (16:9) -->
+          <div style="grid-column:span 2;justify-self:center;width:calc(50% - 2px)"><div class="wistia-wrap" style="aspect-ratio:16/9"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/6zj09e4xr2.js" async type="module"></script><style>wistia-player[media-id='6zj09e4xr2']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/6zj09e4xr2/swatch');display:block;filter:blur(5px);padding-top:56.25%}</style><wistia-player media-id="6zj09e4xr2" aspect="1.7777777777777777" style="width:100%;height:100%"></wistia-player></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item from-right tf">
+      <div class="tl-left"><div class="tl-date">2026 to Present</div><div class="tl-co">Forever-Red by S.A.K.E.</div></div>
+      <div>
+        <div class="tl-role">Customer Service Representative</div>
+        <div class="tl-desc">At SAKE, I drive campus apparel sales while managing the full customer experience, from targeted outreach to order fulfillment and delivery, ensuring efficient operations and strong brand representation.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:1rem">
+          <img src="assets/sake-team.jpg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+          <img src="assets/diego-portrait.jpg" style="width:100%;aspect-ratio:1;object-fit:cover;display:block"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item from-left tf">
+      <div class="tl-left"><div class="tl-date">Summer 2025</div><div class="tl-co">DATEC LATAM, Bolivia</div></div>
+      <div>
+        <div class="tl-role">Administrative Assistant Intern</div>
+        <div class="tl-desc">At DATEC LATAM, I supported operational and administrative processes, coordinating executive activities, managing data, and contributing to a sustainability-focused corporate social responsibility proposal.</div>
+        <div style="display:flex;justify-content:center;margin-top:1rem">
+          <div style="width:38%;"><div class="wistia-wrap" style="aspect-ratio:9/16"><script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/ihg85ily5k.js" async type="module"></script><style>wistia-player[media-id='ihg85ily5k']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/ihg85ily5k/swatch');display:block;filter:blur(5px);padding-top:179.31%}</style><wistia-player media-id="ihg85ily5k" aspect="0.5576923076923077" style="width:100%;height:100%"></wistia-player></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="sec" id="achievements">
+  <span class="tag anim">Honors and Awards</span>
+  <h2 class="h2 anim d1">Academic<br/><em>Excellence</em></h2>
+  <div class="rule anim d2"></div>
+  <div class="ach-wrap stagger">
+    <div class="ach-card" style="grid-column:1/-1;display:grid;grid-template-columns:320px 1fr;gap:3rem;align-items:center">
+      <div style="position:relative">
+        <div style="position:absolute;inset:-3px;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));z-index:0"></div>
+        <!-- DEMO DAY AWARD IMAGES -->
+        <div style="display:flex;flex-direction:column;gap:4px;position:relative;z-index:1">
+          <img src="assets/demo-day-presenting.jpg" alt="Demo Day Audience Choice" style="width:100%;height:188px;object-fit:cover;object-position:50% 25%;display:block"/>
+          <img src="assets/demo-day-team.jpeg" alt="Demo Day Team" style="width:100%;height:188px;object-fit:cover;object-position:top;display:block"/>
+        </div>
+      </div>
+      <div>
+        <span class="ach-school">McMillon Innovation Studio</span>
+        <div style="font-family:'Cormorant Garant',serif;font-size:clamp(1.4rem,2.5vw,1.8rem);font-weight:800;font-style:italic;color:var(--gold);margin-bottom:.75rem;line-height:1.1">Demo Day, Audience Choice Winner</div>
+        <div style="font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:1rem">Slim Chickens Design Team</div>
+        <p style="font-size:1.1rem;color:var(--walnut);line-height:1.9">Part of the award-winning Slim Chickens design team selected as the Audience Choice winner during the largest cohort Demo Day in McMillon Innovation Studio history. Developed a human-centered redesign of the Slim Chickens drive-thru experience focused on Southern hospitality, personalization, and customer experience innovation. Presented the project to industry leaders, faculty, and corporate partners.</p>
+      </div>
+    </div>
+    <div class="ach-card" style="grid-column:1/-1;display:grid;grid-template-columns:320px 1fr;gap:3rem;align-items:center">
+      <div style="position:relative">
+        <div style="position:absolute;inset:-3px;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));z-index:0"></div>
+        <img src="assets/pitch-competition-1.jpeg" alt="Pitch Competition" style="width:100%;height:380px;object-fit:cover;object-position:top;display:block;position:relative;z-index:1"/>
+      </div>
+      <div>
+        <span class="ach-school">University of Arkansas</span>
+        <div style="font-family:'Cormorant Garant',serif;font-size:clamp(1.4rem,2.5vw,1.8rem);font-weight:800;font-style:italic;color:var(--gold);margin-bottom:.75rem;line-height:1.1">Made of U of A Pitch Competition, 1st Place</div>
+        <div style="font-family:'Cormorant Garant',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:1rem">$2,500 Award</div>
+        <p style="font-size:1.1rem;color:var(--walnut);line-height:1.9">Co-developed and delivered a winning 5-minute pitch for Elite Level Scouting USA, showcasing a strategic and scalable approach to athlete recruitment. The project combined market insight, clear value proposition, and strong execution, resulting in a first-place finish and a $2,500 prize.</p>
+      </div>
+    </div>
+    <div class="ach-card">
+      <span class="ach-school">University of Arkansas</span>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">Walton Honors Program</div><div class="ach-s">Sam M. Walton College of Business. Academic excellence and leadership development.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">Tau Sigma National Honor Society</div><div class="ach-s">Selected for excellence as a transfer student.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">Dean's List, GPA 3.8</div><div class="ach-s">GPA 3.75 to 3.99 while completing 12+ credit hours, Fall 2025.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">HubSpot Digital Marketing Certified</div><div class="ach-s">Valid March 2025 to April 2026.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">HubSpot Inbound Marketing Certified</div><div class="ach-s">Valid March 2025 to April 2027.</div></div></div>
+    </div>
+    <div class="ach-card">
+      <span class="ach-school">Gillette College</span>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">President's Award Nominee</div><div class="ach-s">One of the college's highest honors. Excellence, leadership, and community impact.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">President's List, GPA 4.0</div><div class="ach-s">Exceptional academic performance and consistency.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">NJCAA All-Academic Second Team</div><div class="ach-s">GPA 3.80 to 3.99 while competing as a collegiate soccer student-athlete.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">Vice President's List</div><div class="ach-s">High academic performance with GPA between 3.50 and 3.99.</div></div></div>
+      <div class="ach-item"><div class="ach-dot"></div><div><div class="ach-n">Student-Athlete of the Month</div><div class="ach-s">Recognized for excellence on and off the field.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-alt" id="skills">
+  <span class="tag anim">Skills and Tools</span>
+  <h2 class="h2 anim d1">What I<br/><em>Bring</em></h2>
+  <div class="rule anim d2"></div>
+  <div class="sk-wrap anim d3 stagger">
+    <div class="sk-g"><div class="sk-cat">Strategy</div><span class="sk-tag">Content Strategy</span><span class="sk-tag">Audience Targeting</span><span class="sk-tag">Performance Tracking</span><span class="sk-tag">Design Thinking</span><span class="sk-tag">SEO Foundations</span></div>
+    <div class="sk-g"><div class="sk-cat">Marketing Technology</div><span class="sk-tag">Zendesk</span><span class="sk-tag">Punchh</span><span class="sk-tag">SMG</span><span class="sk-tag">Loyalty Systems</span><span class="sk-tag">AI Support Workflows</span><span class="sk-tag">Customer Experience</span></div>
+    <div class="sk-g"><div class="sk-cat">Content</div><span class="sk-tag">Short-Form Video</span><span class="sk-tag">Long-Form Video</span><span class="sk-tag">Visual Storytelling</span><span class="sk-tag">Cross-Platform</span><span class="sk-tag">Brand Voice</span></div>
+    <div class="sk-g"><div class="sk-cat">Growth</div><span class="sk-tag">Analytics and Reporting</span><span class="sk-tag">Engagement Optimization</span><span class="sk-tag">Community Management</span><span class="sk-tag">Keyword Research</span></div>
+    <div class="sk-g"><div class="sk-cat">Tools</div><span class="sk-tag">Canva</span><span class="sk-tag">CapCut</span><span class="sk-tag">Google Workspace</span><span class="sk-tag">Microsoft Office</span><span class="sk-tag">AI Planning</span></div>
+    <div class="sk-g"><div class="sk-cat">Platforms</div><span class="sk-tag">Instagram</span><span class="sk-tag">TikTok</span><span class="sk-tag">Facebook</span><span class="sk-tag">LinkedIn</span></div>
+    <div class="sk-g"><div class="sk-cat">Languages</div><span class="sk-tag">English, Fluent</span><span class="sk-tag">Spanish, Native</span></div>
+  </div>
+</section>
+
+<section class="sec" id="testimonials">
+  <span class="tag anim">Testimonials</span>
+  <h2 class="h2 anim d1">What Others<br/><em>Say</em></h2>
+  <div class="rule anim d2"></div>
+  <div class="test-grid stagger">
+    <div class="tc"><p class="tc-q">Diego brings a lot of creativity and passion to his work at UA Productions. He is always thinking about how to take a project to the next level and cares deeply about the work he is doing. He is a great team player who is full of ideas and very supportive of his fellow co-workers.</p><div><div class="tc-name">Scott Flanagin</div><div class="tc-role">Director of UA Productions, University of Arkansas</div><div class="tc-email">sflanagi@uark.edu</div></div></div>
+    <div class="tc"><p class="tc-q">Working with Diego has been a game changer for our project. He brings creativity, structure, and consistency to everything he does. You can trust him not only to deliver, but to truly care about the outcome.</p><div><div class="tc-name">Hugo Morales</div><div class="tc-role">Co-Founder, Elite Level Scouting</div><div class="tc-email">alemorales2601@gmail.com</div></div></div>
+    <div class="tc"><p class="tc-q">Diego is an exceptionally diligent and motivated student who consistently brings focus, creativity, and professionalism to his work. He approaches challenges with a strong sense of responsibility and a willingness to grow, all while maintaining a positive and collaborative presence.</p><div><div class="tc-name">Joseph A. Poniatowski</div><div class="tc-role">PhD Candidate and English Language Instructor, University of Arkansas</div><div class="tc-email">josephp@uark.edu</div></div></div>
+    <div class="tc"><p class="tc-q">Diego took initiative to visit my office more than any other student that semester. He earned 100% on homework and a 99.6% quiz average, and missed only one class out of 28. He was level-headed, pleasant to work with, and eager to learn.</p><div><div class="tc-name">Thomas Shields</div><div class="tc-role">Mathematics Instructor, University of Arkansas</div><div class="tc-email">shieldst@uark.edu</div></div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <span class="tag anim" style="color:var(--mocha)">Let's Connect</span>
+  <h2 class="contact-h anim d1">The right story can<br/><em>change perception</em><br/>and drive results.</h2>
+  <p class="contact-sub anim d2">Open to internships, collaborations, and creative projects.</p>
+  <a href="mailto:djimenezu2022@gmail.com" class="contact-email anim d3">djimenezu2022@gmail.com</a>
+  <p class="contact-ph anim d3">(929) 424-8216</p>
+  <div class="clinks anim d4">
+    <a href="https://www.linkedin.com/in/diego-jimenez-uu" target="_blank" class="cl"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
+    <a href="https://www.instagram.com/diegojimenezuu" target="_blank" class="cl"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>Instagram</a>
+    <a href="mailto:djimenezu2022@gmail.com" class="cl"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Email</a>
+    <a href="assets/Diego-Jimenez-Resume.pdf" target="_blank" class="cl"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>Resume</a>
+  </div>
+  <p class="footer-sig anim d5"><em>"Give more than you expect.</em> Receive more than you imagine."</p>
+</section>
+
+<script>
+// ── SCROLL-DRIVEN TIMELINE LINE ──
+const tlWrap=document.getElementById('tlWrap');
+const tlProgress=document.getElementById('tlProgress');
+const tlArrow=document.getElementById('tlArrow');
+function updateTimeline(){
+  if(!tlWrap||!tlProgress||!tlArrow) return;
+  const rect=tlWrap.getBoundingClientRect();
+  const total=tlWrap.offsetHeight;
+  const scrolled=Math.max(0,window.innerHeight/2-rect.top);
+  const pct=Math.min(scrolled/total,1);
+  const h=pct*total;
+  tlProgress.style.height=h+'px';
+  tlArrow.style.top=(h-5)+'px';
+  tlArrow.style.opacity=pct>0?'1':'0';
+}
+window.addEventListener('scroll',updateTimeline,{passive:true});
+updateTimeline();
+
+
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  if(spFill)spFill.style.height=Math.min(pct,100)+'%';
+  document.querySelector('nav').classList.toggle('scrolled',window.scrollY>40);
+},{passive:true});
+
+function splitWords(el){
+  const words=el.querySelectorAll('span.word');
+  if(words.length>0) return;
+  el.classList.add('split-words');
+  const children=Array.from(el.childNodes);
+  el.innerHTML='';
+  children.forEach(node=>{
+    if(node.nodeType===3){
+      node.textContent.split(/(\s+)/).forEach(w=>{
+        if(w.trim()){
+          const outer=document.createElement('span');
+          outer.className='word';
+          const inner=document.createElement('span');
+          inner.textContent=w;
+          outer.appendChild(inner);
+          el.appendChild(outer);
+        } else if(w){
+          el.appendChild(document.createTextNode(w));
+        }
+      });
+    } else {
+      const outer=document.createElement('span');
+      outer.className='word';
+      const inner=document.createElement('span');
+      inner.innerHTML=node.outerHTML||node.textContent;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    }
+  });
+}
+document.querySelectorAll('.h2').forEach(el=>splitWords(el));
+document.querySelectorAll('.tag').forEach(el=>{el.classList.add('tag-line');el.style.display='inline-block'});
+
+const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');io.unobserve(x.target)}})},{threshold:0.08});
+setTimeout(()=>document.querySelectorAll('#hero .anim,#hero .anim-r,#hero .hero-name').forEach(el=>el.classList.add('visible')),80);
+document.querySelectorAll('.anim:not(#hero .anim),.anim-l,.anim-r:not(#hero .anim-r),.rule,.stagger,.gold-underline,.tag-line,.split-words').forEach(el=>io.observe(el));
+
+const tlIO=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');tlIO.unobserve(x.target)}})},{threshold:0.06});
+document.querySelectorAll('.tl-item,.tl-line-wrap').forEach(el=>tlIO.observe(el));
+
+const projIO=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.querySelectorAll('.proj').forEach((el,i)=>setTimeout(()=>{el.style.transition='opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1),border-color .25s,box-shadow .5s';el.classList.add('visible')},i*110));projIO.unobserve(x.target)}})},{threshold:0.05});
+document.querySelectorAll('.proj-grid').forEach(el=>projIO.observe(el));
+
+const cntIO=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){
+  x.target.querySelectorAll('[data-target]').forEach(el=>{const t=+el.getAttribute('data-target'),s=el.getAttribute('data-suffix')||'',d=performance.now();const u=n=>{const r=Math.min((n-d)/2000,1),ease=1-Math.pow(1-r,4);el.textContent=Math.round(ease*t).toLocaleString()+s;if(r<1)requestAnimationFrame(u)};requestAnimationFrame(u)});
+  x.target.querySelectorAll('.met-bar').forEach((b,i)=>setTimeout(()=>{b.style.width=b.getAttribute('data-pct')+'%'},i*120+400));
+  x.target.querySelectorAll('.kpi-bar').forEach((b,i)=>setTimeout(()=>{b.style.width=b.getAttribute('data-pct')+'%'},i*120+400));
+  x.target.querySelectorAll('.spark-gold').forEach((el,i)=>setTimeout(()=>{el.style.transition='stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1)';el.style.strokeDashoffset='0'},i*100+500));
+  x.target.querySelectorAll('.spark-dot').forEach(el=>setTimeout(()=>{el.style.transition='opacity .5s ease';el.style.opacity='1'},2200));
+  x.target.querySelectorAll('.spark-bar').forEach((el,i)=>{const h=el.getAttribute('data-h')||'20';setTimeout(()=>{el.style.transition='height .9s cubic-bezier(.22,1,.36,1),y .9s cubic-bezier(.22,1,.36,1)';el.setAttribute('height',h);el.setAttribute('y',30-h)},i*100+500)});
+  x.target.querySelectorAll('.spark-ring-gold').forEach(el=>setTimeout(()=>{el.style.transition='stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1)';el.style.strokeDashoffset='0'},500));
+  x.target.querySelectorAll('.spark-fill').forEach(el=>setTimeout(()=>{el.style.transition='width 1.6s cubic-bezier(.22,1,.36,1)';el.setAttribute('width',el.getAttribute('data-w'))},500));
+  cntIO.unobserve(x.target);
+}})},{threshold:0.2});
+document.querySelectorAll('.metrics,.work-card').forEach(el=>cntIO.observe(el));
+
+document.querySelectorAll('.tilt-card').forEach(card=>{
+  const glow=card.querySelector('.tilt-glow');
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-6px)`;if(glow){glow.style.background=`radial-gradient(circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(201,160,32,0.12) 0%,transparent 60%)`;glow.style.opacity='1'}},{passive:true});
+  card.addEventListener('mouseleave',()=>{card.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)';card.style.transition='transform .6s cubic-bezier(.22,1,.36,1)';if(glow)glow.style.opacity='0'});
+  card.addEventListener('mouseenter',()=>card.style.transition='transform .1s ease');
+});
+
+document.querySelectorAll('.met').forEach(met=>{
+  met.addEventListener('mousemove',e=>{const r=met.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;met.style.transform=`perspective(400px) rotateY(${x*12}deg) rotateX(${-y*12}deg) translateY(-6px)`;met.style.transition='transform .05s ease'},{passive:true});
+  met.addEventListener('mouseleave',()=>{met.style.transform='perspective(400px) rotateY(0) rotateX(0) translateY(0)';met.style.transition='transform .5s cubic-bezier(.22,1,.36,1)'});
+});
+
+document.querySelectorAll('.proj').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg) translateY(-6px)`;card.style.transition='transform .05s ease'},{passive:true});
+  card.addEventListener('mouseleave',()=>{card.style.transform='none';card.style.transition='transform .6s cubic-bezier(.22,1,.36,1)'});
+});
+
+const heroImg=document.querySelector('.hero-img-wrap img');
+let ticking=false;
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{if(heroImg)heroImg.style.transform=`scale(1.06) translateY(${window.scrollY*0.05}px)`;ticking=false});ticking=true}},{passive:true});
+
+if(window.innerWidth>768){
+  const cur=document.createElement('div');
+  cur.style.cssText='position:fixed;width:8px;height:8px;background:#C9A020;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .15s ease,opacity .3s ease,width .3s,height .3s;opacity:0';
+  document.body.appendChild(cur);
+  const ring=document.createElement('div');
+  ring.style.cssText='position:fixed;width:36px;height:36px;border:1px solid rgba(201,160,32,0.5);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;transition:opacity .3s,border-color .3s';
+  document.body.appendChild(ring);
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';cur.style.opacity='1';ring.style.opacity='1'},{passive:true});
+  setInterval(()=>{rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';ring.style.transform='translate(-50%,-50%)'},16);
+  document.addEventListener('mouseleave',()=>{cur.style.opacity='0';ring.style.opacity='0'});
+  document.querySelectorAll('a,button,.work-card,.tc,.proj,.met,.pill').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.width='14px';cur.style.height='14px';ring.style.borderColor='rgba(201,160,32,0.9)';ring.style.transform='translate(-50%,-50%) scale(1.5)'});
+    el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';ring.style.borderColor='rgba(201,160,32,0.5)';ring.style.transform='translate(-50%,-50%) scale(1)'});
+  });
+}
+
+document.querySelectorAll('.tl-item').forEach((item,i)=>{
+  if(item.querySelector('.tl-num'))return;
+  const n=document.createElement('div');
+  n.className='tl-num';
+  n.style.cssText='position:absolute;right:0;top:2rem;font-family:"Cormorant Garant",serif;font-size:4.5rem;font-weight:800;color:rgba(201,160,32,0.05);line-height:1;pointer-events:none;font-style:italic;user-select:none;transition:color .4s';
+  n.textContent='0'+(i+1);
+  item.style.position='relative';
+  item.appendChild(n);
+  item.addEventListener('mouseenter',()=>n.style.color='rgba(201,160,32,0.12)');
+  item.addEventListener('mouseleave',()=>n.style.color='rgba(201,160,32,0.05)');
+});
+</script>
+</body>
+</html>

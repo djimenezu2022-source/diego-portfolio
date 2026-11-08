@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Diego Jimenez | Links</title>
+<meta name="description" content="Diego Jimenez. Marketing, strategy, and storytelling. Contact, resume, and portfolio in one place.">
+<meta name="theme-color" content="#F5F0E8">
+<meta property="og:title" content="Diego Jimenez | Links">
+<meta property="og:description" content="Marketing, strategy, and storytelling. Contact, resume, and portfolio in one place.">
+<meta property="og:image" content="https://diegojimenezuu.netlify.app/assets/hero-photo.jpg">
+<link rel="icon" href="assets/dj-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5F0E8;
+    --cream-2:#EDE5D6;
+    --card:#FBF8F2;
+    --ink:#1F1A14;
+    --ink-soft:#5A5046;
+    --gold:#C9A020;
+    --gold-deep:#A8841A;
+    --gold-light:#E6C75A;
+    --line:rgba(201,160,32,.35);
+    --shadow:0 10px 30px -12px rgba(60,45,20,.25);
+    --serif:'Cormorant Garant','Cormorant Garamond',Georgia,serif;
+    --sans:'Josefin Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:1.125rem;
+    line-height:1.55;
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* soft moving glow in the background */
+  .glow{position:fixed;inset:-20%;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(40% 30% at 20% 10%, rgba(201,160,32,.16), transparent 70%),
+      radial-gradient(35% 30% at 85% 35%, rgba(230,199,90,.14), transparent 70%),
+      radial-gradient(45% 35% at 50% 100%, rgba(201,160,32,.10), transparent 70%);
+    animation:drift 18s ease-in-out infinite alternate;}
+  @keyframes drift{to{transform:translate3d(3%,-2%,0) scale(1.05)}}
+
+  .wrap{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:28px 18px 48px}
+
+  /* top bar */
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+  .logo{height:34px;width:auto}
+  .share{font-family:var(--sans);font-size:.95rem;letter-spacing:.08em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--ink);padding:9px 14px;border-radius:999px;cursor:pointer;
+    display:flex;gap:8px;align-items:center;transition:.3s}
+  .share:hover{border-color:var(--gold);background:rgba(201,160,32,.08)}
+  .share svg{width:16px;height:16px}
+
+  /* profile */
+  .profile{text-align:center}
+  .avatar-ring{width:136px;height:136px;margin:0 auto 18px;border-radius:50%;padding:3px;position:relative;
+    background:conic-gradient(from 0deg,var(--gold),var(--gold-light),var(--gold-deep),var(--gold));
+    animation:spin 8s linear infinite;}
+  /* photo: zoomed in on the face. Change --photo-zoom or --photo-pos to adjust the crop */
+  .avatar{width:100%;height:100%;border-radius:50%;border:4px solid var(--cream);
+    background-image:var(--photo);background-size:var(--photo-zoom);background-position:var(--photo-pos);background-repeat:no-repeat;background-color:#1a1a1a;
+    animation:spin 8s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .status{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;letter-spacing:.06em;
+    padding:6px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);margin-bottom:14px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#3E9B5A;box-shadow:0 0 0 0 rgba(62,155,90,.6);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(62,155,90,0)}100%{box-shadow:0 0 0 0 rgba(62,155,90,0)}}
+  h1{font-family:var(--serif);font-weight:600;font-size:3rem;line-height:1;letter-spacing:-.01em}
+  h1 em{color:var(--gold);font-style:italic}
+  .role{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-deep);margin:10px 0 14px}
+  .bio{color:var(--ink-soft);font-size:1.15rem;max-width:36ch;margin:0 auto}
+  .loc{font-size:.95rem;color:var(--ink-soft);margin-top:10px;opacity:.85}
+
+  /* quick actions */
+  .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:26px 0 22px}
+  .q{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);
+    font-size:.85rem;letter-spacing:.05em;padding:12px 4px;border-radius:16px;background:var(--card);border:1px solid var(--line);
+    transition:transform .3s,box-shadow .3s,border-color .3s}
+  .q svg{width:22px;height:22px;color:var(--gold-deep)}
+  .q:hover,.q:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--gold)}
+
+  /* 15 second snapshot */
+  .label{font-size:.85rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-deep);
+    display:flex;align-items:center;gap:12px;margin:8px 0 12px}
+  .label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 14px;position:relative;overflow:hidden}
+  .stat b{display:block;font-family:var(--serif);font-size:2.1rem;line-height:1;font-weight:700;color:var(--ink)}
+  .stat span{display:block;font-size:.95rem;color:var(--ink-soft);margin-top:6px;line-height:1.35}
+  .stat::before{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(230,199,90,.35),transparent);transform:skewX(-20deg);
+    animation:sheen 6s ease-in-out infinite}
+  .stat:nth-child(2)::before{animation-delay:1.5s}.stat:nth-child(3)::before{animation-delay:3s}.stat:nth-child(4)::before{animation-delay:4.5s}
+  @keyframes sheen{0%,70%{left:-60%}100%{left:130%}}
+
+  .now{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 16px;margin-bottom:26px}
+  .now li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(201,160,32,.18);font-size:1.1rem}
+  .now li:last-child{border-bottom:0}
+  .now li i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:.55em}
+  .now small{display:block;color:var(--ink-soft);font-size:.95rem}
+
+  /* link buttons */
+  .links{display:flex;flex-direction:column;gap:12px}
+  .btn{position:relative;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;min-height:66px;
+    font-size:1.15rem;font-weight:400;overflow:hidden;cursor:pointer;width:100%;text-align:left;font-family:var(--sans);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s}
+  .btn .ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    background:rgba(201,160,32,.12);color:var(--gold-deep);transition:.35s}
+  .btn .ic svg{width:21px;height:21px}
+  .btn .txt{flex:1}
+  .btn .txt small{display:block;font-size:.9rem;color:var(--ink-soft);margin-top:2px}
+  .btn .arr{width:18px;height:18px;color:var(--gold-deep);transition:transform .35s}
+  .btn::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(90deg,transparent,rgba(201,160,32,.14),transparent);transform:translateX(-100%);transition:transform .7s}
+  .btn:hover,.btn:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--gold)}
+  .btn:hover::after{transform:translateX(100%)}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn:hover .ic{background:var(--gold);color:var(--cream)}
+  .btn.primary{background:linear-gradient(135deg,#D4AE2C,var(--gold) 45%,var(--gold-deep));color:#fff;border-color:transparent}
+  .btn.primary .ic{background:rgba(255,255,255,.2);color:#fff}
+  .btn.primary .txt small{color:rgba(255,255,255,.85)}
+  .btn.primary .arr{color:#fff}
+  .btn.primary:hover .ic{background:#fff;color:var(--gold-deep)}
+  .btn:active{transform:scale(.98)}
+
+  footer{text-align:center;margin-top:34px}
+  .quote{font-family:var(--serif);font-size:1.45rem;line-height:1.3;color:var(--ink)}
+  .quote em{color:var(--gold-deep)}
+  .fine{font-size:.9rem;color:var(--ink-soft);margin-top:14px;letter-spacing:.04em}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,120%);background:var(--ink);color:var(--cream);
+    padding:12px 20px;border-radius:999px;font-size:1rem;z-index:10;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+  .toast.show{transform:translate(-50%,0)}
+
+  /* entrance animation */
+  .rv{opacity:0;transform:translateY(22px);filter:blur(4px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1),filter .9s}
+  .rv.in{opacity:1;transform:none;filter:none}
+
+  @media (min-width:700px){ .wrap{padding-top:48px} h1{font-size:3.4rem} }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none;filter:none}
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<main class="wrap">
+
+  <div class="top rv">
+    <a href="/" aria-label="Full portfolio"><img class="logo" src="assets/dj-logo.png" alt="DJ"></a>
+    <button class="share" id="share" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
+      Share
+    </button>
+  </div>
+
+  <section class="profile">
+    <div class="avatar-ring rv"><div class="avatar" role="img" aria-label="Diego Jimenez"
+      style="--photo:url('assets/hero-photo.jpg');--photo-zoom:112%;--photo-pos:50% 4%"></div></div>
+    <div class="status rv"><span class="dot"></span>Open to internships and collaborations</div>
+    <h1 class="rv">Diego <em>Jimenez</em></h1>
+    <p class="role rv">Marketing · Strategy · Storytelling</p>
+    <p class="bio rv">I'm a marketing student at the University of Arkansas who turns stories into measurable growth.</p>
+    <p class="loc rv">Fayetteville, AR &nbsp;·&nbsp; La Paz, Bolivia</p>
+  </section>
+
+  <nav class="quick rv" aria-label="Quick contact">
+    <a class="q" href="mailto:djimenezu2022@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</a>
+    <a class="q" href="tel:+19294248216">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Call</a>
+    <a class="q" href="sms:+19294248216">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text</a>
+    <a class="q" href="https://www.linkedin.com/in/diego-jimenez-uu" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6c.5-.9 1.7-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.5V9h3.6v11.5z"/></svg>LinkedIn</a>
+  </nav>
+
+  <p class="label rv">In 15 seconds</p>
+  <div class="stats">
+    <div class="stat rv"><b data-count="677" data-suffix="K+">677K+</b><span>views for Elite Level Scouting, a venture I co-founded</span></div>
+    <div class="stat rv"><b data-count="1.4" data-decimals="1" data-suffix="M+">1.4M+</b><span>impressions at UA Productions</span></div>
+    <div class="stat rv"><b>1st</b><span>Place, Made of U of A Pitch Competition</span></div>
+    <div class="stat rv"><b data-count="54" data-suffix="%">54%</b><span>follower growth through strategic content</span></div>
+  </div>
+
+  <ul class="now rv">
+    <li><i></i><div>Marketing Technology Intern<small>Slim Chickens, Digital Revenue and Guest Loyalty</small></div></li>
+    <li><i></i><div>Co-Founder and Marketing Lead<small>Elite Level Scouting</small></div></li>
+    <li><i></i><div>B.S. Marketing, Walton College<small>University of Arkansas, graduating May 2027</small></div></li>
+  </ul>
+
+  <p class="label rv">Connect</p>
+  <div class="links">
+    <button class="btn primary rv" id="vcard" type="button">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></span>
+      <span class="txt">Save My Contact<small>Add me to your phone in one tap</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+
+    <a class="btn rv" href="mailto:djimenezu2022@gmail.com?subject=Hi%20Diego">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+      <span class="txt">Email Me<small>djimenezu2022@gmail.com</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="btn rv" href="https://www.linkedin.com/in/diego-jimenez-uu" target="_blank" rel="noopener">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6c.5-.9 1.7-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.5V9h3.6v11.5z"/></svg></span>
+      <span class="txt">Connect on LinkedIn<small>Let's keep in touch</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="btn rv" href="assets/Diego-Jimenez-Resume.pdf" target="_blank" rel="noopener">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 12v6M9 15l3 3 3-3"/></svg></span>
+      <span class="txt">Download My Resume<small>PDF, updated 2026</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="btn rv" href="/">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M7 6.5h.01M10 6.5h.01"/></svg></span>
+      <span class="txt">View My Full Portfolio<small>Work, projects, journey, and awards</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <a class="btn rv" href="https://www.instagram.com/diegojimenezuu" target="_blank" rel="noopener">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></span>
+      <span class="txt">Follow on Instagram<small>@diegojimenezuu</small></span>
+      <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+
+  <footer class="rv">
+    <p class="quote"><em>"Give more than you expect.</em><br>Receive more than you imagine."</p>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  // staggered entrance
+  var items=[].slice.call(document.querySelectorAll('.rv'));
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12}):null;
+  items.forEach(function(el,i){
+    el.style.transitionDelay=Math.min(i*70,900)+'ms';
+    if(io) io.observe(el); else el.classList.add('in');
+  });
+
+  // count up numbers
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    if(reduce) return;
+    var end=parseFloat(el.dataset.count), dec=parseInt(el.dataset.decimals||0,10), suf=el.dataset.suffix||'';
+    var started=false;
+    var run=function(){
+      if(started) return; started=true;
+      var t0=null, dur=1600;
+      function step(t){ if(!t0) t0=t; var p=Math.min((t-t0)/dur,1); var e=1-Math.pow(1-p,3);
+        el.textContent=(end*e).toFixed(dec)+suf; if(p<1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    };
+    el.textContent=(0).toFixed(dec)+suf;
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es,o){ if(es[0].isIntersecting){ setTimeout(run,500); o.disconnect(); } }).observe(el);
+    } else run();
+  });
+
+  // toast
+  var toast=document.getElementById('toast'), tt;
+  function say(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(tt); tt=setTimeout(function(){toast.classList.remove('show')},2200); }
+
+  // save contact (vCard)
+  document.getElementById('vcard').addEventListener('click',function(){
+    var v=[
+      'BEGIN:VCARD','VERSION:3.0',
+      'N:Jimenez Urquiola;Diego;;;','FN:Diego Jimenez',
+      'TITLE:Marketing Student and Marketing Technology Intern',
+      'ORG:University of Arkansas',
+      'TEL;TYPE=CELL:+19294248216',
+      'EMAIL;TYPE=INTERNET:djimenezu2022@gmail.com',
+      'URL:https://diegojimenezuu.netlify.app/',
+      'X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/diego-jimenez-uu',
+      'NOTE:Marketing · Strategy · Storytelling. Portfolio: diegojimenezuu.netlify.app',
+      'END:VCARD'
+    ].join('\r\n');
+    var blob=new Blob([v],{type:'text/vcard;charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a'); a.href=url; a.download='Diego-Jimenez.vcf';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},2000);
+    say('Contact card ready');
+  });
+
+  // share
+  document.getElementById('share').addEventListener('click',function(){
+    var data={title:'Diego Jimenez',text:'Marketing, strategy, and storytelling.',url:location.href};
+    if(navigator.share){ navigator.share(data).catch(function(){}); }
+    else if(navigator.clipboard){ navigator.clipboard.writeText(location.href).then(function(){say('Link copied')}); }
+    else say(location.href);
+  });
+})();
+</script>
+</body>
+</html>
